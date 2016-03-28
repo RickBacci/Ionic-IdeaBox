@@ -7,12 +7,13 @@ angular.module('ideabox.controllers', [])
         function (IdeaFactory, $scope, $ionicModal) {
             "use strict";
             // Load the add / change dialog from the given template URL
-            $ionicModal.fromTemplateUrl('add-change-dialog.html', function (modal) {
-                $scope.addDialog = modal;
-            }, {
-                scope: $scope,
-                animation: 'slide-in-up'
-            });
+            $ionicModal.fromTemplateUrl('add-change-dialog.html',
+                function (modal) {
+                    $scope.addDialog = modal;
+                }, {
+                    scope: $scope,
+                    animation: 'slide-in-up'
+                });
 
             $scope.showAddChangeDialog = function (action) {
                 $scope.action = action;
@@ -20,43 +21,45 @@ angular.module('ideabox.controllers', [])
             };
 
             $scope.leaveAddChangeDialog = function () {
-                // Remove dialog
                 $scope.addDialog.remove();
                 // Reload modal template to have cleared form
-                $ionicModal.fromTemplateUrl('add-change-dialog.html', function (modal) {
-                    $scope.addDialog = modal;
-                }, {
-                    scope: $scope,
-                    animation: 'slide-in-up'
-                });
+                $ionicModal.fromTemplateUrl('add-change-dialog.html',
+                    function (modal) {
+                        $scope.addDialog = modal;
+                    }, {
+                        scope: $scope,
+                        animation: 'slide-in-up'
+                    });
             };
 
-            $scope.leftButtons = [];
-            var addButton = {};
-            addButton.type = "button-clear";
-            addButton.content = '<i class="icon ion-ios7-plus-outline"></i>';
-            addButton.tap = function () {
-                $scope.showAddChangeDialog('add');
-            };
-            $scope.leftButtons.push(addButton);
-
-            // Define item buttons
-            $scope.itemButtons = [{
-                text: 'Delete',
-                type: 'button-assertive',
-                onTap: function (item) {
-                    $scope.removeItem(item);
+            $scope.leftButtons = [
+                {
+                    type: "button-clear",
+                    content: '<i class="icon ion-plus-round"></i>',
+                    tap: function () {
+                        $scope.showAddChangeDialog('add');
+                    }
                 }
-            }, {
-                text: 'Edit',
-                type: 'button-calm',
-                onTap: function (item) {
-                    $scope.showEditItem(item);
-                }
-            }];
+            ];
 
-            // Get list from storage
-            $scope.list = IdeaFactory.getIdeas();
+            $scope.itemButtons = [
+                {
+                    text: '',
+                    type: 'button-clear icon ion-edit',
+                    onTap: function (item) {
+                        $scope.showEditItem(item);
+                    }
+                },
+                {
+                    text: '',
+                    type: 'button-clear icon ion-trash-a',
+                    onTap: function (item) {
+                        $scope.removeItem(item);
+                    }
+                }
+            ];
+
+            $scope.list = IdeaFactory.getIdeas() || [];
 
             // Used to cache the empty form for Edit Dialog
             $scope.saveEmpty = function (form) {
@@ -67,18 +70,19 @@ angular.module('ideabox.controllers', [])
                 //Remove existing default
                 var i;
                 for (i = 0; i < $scope.list.length; i++) {
-                    if ($scope.list[i].useAsDefault === true) {
+                    if ($scope.list[i].useAsDefault) {
                         $scope.list[i].useAsDefault = false;
                     }
                 }
             }
             $scope.addItem = function (form) {
-                var newIdea = {};
                 // Add values from form to object
-                newIdea.description = form.description.$modelValue;
-                newIdea.useAsDefault = form.useAsDefault.$modelValue;
+                var newIdea = {
+                    description:  form.description.$modelValue,
+                    useAsDefault: form.useAsDefault.$modelValue
+                };
                 // If this is the first item it will be the default item
-                if ($scope.list.length === 0) {
+                if ($scope.list && $scope.list.length === 0) {
                     newIdea.useAsDefault = true;
                 } else {
                     // Remove old default entry from list
@@ -96,12 +100,11 @@ angular.module('ideabox.controllers', [])
             $scope.removeItem = function (item) {
                 // Search & Destroy item from list
                 $scope.list.splice($scope.list.indexOf(item), 1);
-                // If this item was the Default we set first item in list to default
+                // If idea was the Default we set first idea in list to default
                 if (item.useAsDefault === true && $scope.list.length !== 0) {
                     $scope.list[0].useAsDefault = true;
                 }
-                // Save list in factory
-                IdeaFactory.setList($scope.list);
+                IdeaFactory.setIdeas($scope.list);
             };
 
             $scope.makeDefault = function (item) {
@@ -110,7 +113,6 @@ angular.module('ideabox.controllers', [])
                 $scope.list[newDefaultIndex].useAsDefault = true;
                 IdeaFactory.setIdeas($scope.list);
             };
-
 
             $scope.showEditItem = function (item) {
 
@@ -125,25 +127,27 @@ angular.module('ideabox.controllers', [])
             };
 
             $scope.editItem = function (form) {
-                var item = {}, editIndex;
+                var item, editIndex;
 
-
-                item.description = form.description.$modelValue;
-                item.useAsDefault = form.useAsDefault.$modelValue;
+                item = {
+                    description:  form.description.$modelValue,
+                    useAsDefault: form.useAsDefault.$modelValue
+                };
 
                 editIndex = IdeaFactory.getIdeas().indexOf($scope.tmpEditItem);
+
                 $scope.list[editIndex] = item;
-                // Set first item to default
-                if ($scope.tmpEditItem.useAsDefault === true && item.useAsDefault === false) {
+
+                if ($scope.list.length === 1) {
                     $scope.list[0].useAsDefault = true;
                 }
 
-                IdeaFactory.setIdeas($scope.list);
                 if (item.useAsDefault) {
                     $scope.makeDefault(item);
                 }
+
+                IdeaFactory.setIdeas($scope.list);
                 $scope.leaveAddChangeDialog();
             };
-
         }
         ]);
