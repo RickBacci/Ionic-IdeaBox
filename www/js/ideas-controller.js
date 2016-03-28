@@ -70,7 +70,7 @@ angular.module('ideabox.controllers', [])
                 //Remove existing default
                 var i;
                 for (i = 0; i < $scope.list.length; i++) {
-                    if ($scope.list[i].useAsDefault === true) {
+                    if ($scope.list[i].useAsDefault) {
                         $scope.list[i].useAsDefault = false;
                     }
                 }
