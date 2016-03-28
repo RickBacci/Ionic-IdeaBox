@@ -32,12 +32,6 @@ angular.module('ideabox.controllers', [])
                     });
             };
 
-            // Define item buttons
-            $scope.itemButtons = [{
-                text: 'Delete',
-                type: 'button-assertive',
-                onTap: function (item) {
-                    $scope.removeItem(item);
             $scope.leftButtons = [
                 {
                     type: "button-clear",
@@ -46,16 +40,26 @@ angular.module('ideabox.controllers', [])
                         $scope.showAddChangeDialog('add');
                     }
                 }
-            }, {
-                text: 'Edit',
-                type: 'button-calm',
-                onTap: function (item) {
-                    $scope.showEditItem(item);
-                }
-            }];
+            ];
 
-            // Get list from storage
-            $scope.list = IdeaFactory.getIdeas();
+            $scope.itemButtons = [
+                {
+                    text: '',
+                    type: 'button-clear icon ion-edit',
+                    onTap: function (item) {
+                        $scope.showEditItem(item);
+                    }
+                },
+                {
+                    text: '',
+                    type: 'button-clear icon ion-trash-a',
+                    onTap: function (item) {
+                        $scope.removeItem(item);
+                    }
+                }
+            ];
+
+            $scope.list = IdeaFactory.getIdeas() || [];
 
             // Used to cache the empty form for Edit Dialog
             $scope.saveEmpty = function (form) {
