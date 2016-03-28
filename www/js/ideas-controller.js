@@ -7,12 +7,13 @@ angular.module('ideabox.controllers', [])
         function (IdeaFactory, $scope, $ionicModal) {
             "use strict";
             // Load the add / change dialog from the given template URL
-            $ionicModal.fromTemplateUrl('add-change-dialog.html', function (modal) {
-                $scope.addDialog = modal;
-            }, {
-                scope: $scope,
-                animation: 'slide-in-up'
-            });
+            $ionicModal.fromTemplateUrl('add-change-dialog.html',
+                function (modal) {
+                    $scope.addDialog = modal;
+                }, {
+                    scope: $scope,
+                    animation: 'slide-in-up'
+                });
 
             $scope.showAddChangeDialog = function (action) {
                 $scope.action = action;
@@ -20,15 +21,15 @@ angular.module('ideabox.controllers', [])
             };
 
             $scope.leaveAddChangeDialog = function () {
-                // Remove dialog
                 $scope.addDialog.remove();
                 // Reload modal template to have cleared form
-                $ionicModal.fromTemplateUrl('add-change-dialog.html', function (modal) {
-                    $scope.addDialog = modal;
-                }, {
-                    scope: $scope,
-                    animation: 'slide-in-up'
-                });
+                $ionicModal.fromTemplateUrl('add-change-dialog.html',
+                    function (modal) {
+                        $scope.addDialog = modal;
+                    }, {
+                        scope: $scope,
+                        animation: 'slide-in-up'
+                    });
             };
 
             $scope.leftButtons = [];
