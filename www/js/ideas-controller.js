@@ -111,7 +111,6 @@ angular.module('ideabox.controllers', [])
                 IdeaFactory.setIdeas($scope.list);
             };
 
-
             $scope.showEditItem = function (item) {
 
                 // Remember edit item to change it later
@@ -125,25 +124,27 @@ angular.module('ideabox.controllers', [])
             };
 
             $scope.editItem = function (form) {
-                var item = {}, editIndex;
+                var item, editIndex;
 
-
-                item.description = form.description.$modelValue;
-                item.useAsDefault = form.useAsDefault.$modelValue;
+                item = {
+                    description:  form.description.$modelValue,
+                    useAsDefault: form.useAsDefault.$modelValue
+                };
 
                 editIndex = IdeaFactory.getIdeas().indexOf($scope.tmpEditItem);
+
                 $scope.list[editIndex] = item;
-                // Set first item to default
-                if ($scope.tmpEditItem.useAsDefault === true && item.useAsDefault === false) {
+
+                if ($scope.list.length === 1) {
                     $scope.list[0].useAsDefault = true;
                 }
 
-                IdeaFactory.setIdeas($scope.list);
                 if (item.useAsDefault) {
                     $scope.makeDefault(item);
                 }
+
+                IdeaFactory.setIdeas($scope.list);
                 $scope.leaveAddChangeDialog();
             };
-
         }
         ]);
