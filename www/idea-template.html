@@ -10,17 +10,13 @@
 	</ion-header-bar>
 
 	<ion-content has-header="true">
-		<ion-list option-buttons="itemButtons" can-swipe="true">
-			<label class="item item-divider text-center">
-    		My Awesome Ideas
-  		</label>
-  		<ion-item ng-if="list.length == 0">
-				Press <i class="icon ion-ios7-plus-outline"></i> to add idea
-			</ion-item>
-			<!--  -->
-			<ion-item ng-repeat="item in list" item="item" item-type="item item-icon-left" ng-click="makeDefault(item)" ng-tap="makeDefault(item)">
-	  					<i ng-if="item.useAsDefault" class="icon ion-checkmark"></i>
-	  					{{ item.description }}
+		<ion-list option-buttons="itemButtons">
+			<label  ng-if="list.length === 0" class="item item-divider text-center">
+        Press <i class="icon ion-plus-round"></i> to add idea
+      </label>
+			<ion-item ng-repeat="item in list" item="item" item-type="item" ng-click="makeDefault(item)" ng-tap="makeDefault(item)">
+	  	  <i ng-if="item.useAsDefault" class="icon ion-checkmark"></i>
+	  	  {{ item.description }}
 			</ion-item>
 		</ion-list>
 	</ion-content>
