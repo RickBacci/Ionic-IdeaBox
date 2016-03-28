@@ -76,12 +76,13 @@ angular.module('ideabox.controllers', [])
                 }
             }
             $scope.addItem = function (form) {
-                var newIdea = {};
                 // Add values from form to object
-                newIdea.description = form.description.$modelValue;
-                newIdea.useAsDefault = form.useAsDefault.$modelValue;
+                var newIdea = {
+                    description:  form.description.$modelValue,
+                    useAsDefault: form.useAsDefault.$modelValue
+                };
                 // If this is the first item it will be the default item
-                if ($scope.list.length === 0) {
+                if ($scope.list && $scope.list.length === 0) {
                     newIdea.useAsDefault = true;
                 } else {
                     // Remove old default entry from list
