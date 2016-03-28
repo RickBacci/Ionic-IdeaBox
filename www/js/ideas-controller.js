@@ -32,21 +32,19 @@ angular.module('ideabox.controllers', [])
                     });
             };
 
-            $scope.leftButtons = [];
-            var addButton = {};
-            addButton.type = "button-clear";
-            addButton.content = '<i class="icon ion-ios7-plus-outline"></i>';
-            addButton.tap = function () {
-                $scope.showAddChangeDialog('add');
-            };
-            $scope.leftButtons.push(addButton);
-
             // Define item buttons
             $scope.itemButtons = [{
                 text: 'Delete',
                 type: 'button-assertive',
                 onTap: function (item) {
                     $scope.removeItem(item);
+            $scope.leftButtons = [
+                {
+                    type: "button-clear",
+                    content: '<i class="icon ion-plus-round"></i>',
+                    tap: function () {
+                        $scope.showAddChangeDialog('add');
+                    }
                 }
             }, {
                 text: 'Edit',
