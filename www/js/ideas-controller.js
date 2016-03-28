@@ -100,12 +100,11 @@ angular.module('ideabox.controllers', [])
             $scope.removeItem = function (item) {
                 // Search & Destroy item from list
                 $scope.list.splice($scope.list.indexOf(item), 1);
-                // If this item was the Default we set first item in list to default
+                // If idea was the Default we set first idea in list to default
                 if (item.useAsDefault === true && $scope.list.length !== 0) {
                     $scope.list[0].useAsDefault = true;
                 }
-                // Save list in factory
-                IdeaFactory.setList($scope.list);
+                IdeaFactory.setIdeas($scope.list);
             };
 
             $scope.makeDefault = function (item) {
